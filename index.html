@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+  <html lang="en">
+    <head>
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+      <link rel="stylesheet" href="style.css">
+      <title>Obtain Hash</title>
+    </head>
+    <body>
+      <div class="container">
+        <div class="page-header">
+          <h1>Obtain Hash from Zip</h1>
+          <small>Browse and select the desired zip file then hit "Obtain Hash" to begin processing</small>
+        </div>
+        <div class="row">
+          <div class="input-group">
+            <div class="input-group-addon">
+	            <span class="glyphicon glyphicon-paperclip"></span>
+            </div>
+            <input type="file" id="fileURL" class="btn btn-default btn-lg"/>
+          </div>
+          <ul id="fileOutput"></ul>
+          <button type="button" id="checkFile" class="btn btn-default btn-lg" disabled="true">
+            <span class="glyphicon glyphicon-export" aria-hidden="true"></span>Obtain Hash
+          </button>
+          <button type="button" id="clearContent" class="btn btn-default btn-lg">
+            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>Clear
+          </button>
+        </div>
+
+      </div>
+
+      </div>
+      <script>
+        (function(){
+          var files,
+              file,
+              extension,
+              input = document.getElementById("fileURL"),
+              output = document.getElementById("fileOutput"),
+              check = document.getElementById('checkFile');
+              clear = document.getElementById('clearContent');
+
+          input.addEventListener("change", function(e) {
+            // checks if input filed is filled
+            if(input.files.length > 0) {
+              check.disabled = false;
+            } else {
+              check.disabled = true;
+            }
+            // displays selected file
+            files = e.target.files;
+            output.innerHTML = "";
+
+            for (var i = 0, len = files.length; i < len; i++) {
+                file = files[i];
+                if (file.type.match('zip.*')) {
+                  continue;
+                } else {
+                  alert('Please select a .zip file')
+                  input.value = '';
+                  check.disabled = true;
+                  output.removeChild(output.childNodes[0]);
+                }
+                extension = file.name.split(".").pop();
+                output.innerHTML += "<li class='type-" + extension + "'>" + file.name + "</li>";
+            }
+          }, false);
+          // clear input value
+          clear.addEventListener('click', function(e) {
+            input.value = '';
+            check.disabled = true;
+            output.removeChild(output.childNodes[0]);
+          }, false);
+          // post file to server
+          check.addEventListener('click', function(e) {
+            function postFile(file) {
+              xmlHttp=GetXmlHttpObject();
+              // url="index1.php";
+              // var params="columnSelector="+JSON.stringify(filterData);
+              xmlHttp.open("POST",url,true);
+              xmlHttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+              xmlHttp.onreadystatechange="";
+              xmlHttp.send(params);
+            }
+          }, false)
+        })();
+      </script>
+    </body>
+  </html>
